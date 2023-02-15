@@ -1,0 +1,73 @@
+<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>TodoTracker</title>
+</head>
+<body>
+  <h1 id="title">Todo Tracker</h1>
+
+  <form>
+    <input type="text" id="user-todo" placeholder="New Todo" required>
+  </form>
+
+  <h2 id="todo-header">Todos</h2>
+  <ul>
+
+  </ul>
+
+  <button id="clear">Clear All</button>
+
+  <script>
+    var form = document.querySelector('form');
+    var todoList = document.querySelector('ul');
+    var button = document.querySelector('button');
+    var input = document.getElementById('user-todo');
+
+    var todosArray = localStorage.getItem('todos') ? JSON.parse(localStorage.getItem('todos')) : []; 
+// it will keep the todo in local storage if we refresh the page, needs the for loop to work
+
+  
+    localStorage.setItem('todos', JSON.stringify(todosArray)); 
+// jasonstringfy turns java script object into sting so local storage understands it
+    
+   var storage = JSON.parse(localStorage.getItem('todos'));//jason.parse is used to convert the strings into javascript
+// objects and this varible store all info in local storage 
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); // prevents page from refreshing 
+
+      
+      todosArray.push(input.value); // it will push the user input to the todos field 
+      
+      localStorage.setItem('todos', JSON.stringify(todosArray));              
+      todoMaker(input.value);
+      input.value = ""; // puts it in the todo list otherwise it will stay where we wrote it 
+    });
+
+    var todoMaker = function(text) {
+      var todo = document.createElement('li'); // ????
+      todo.textContent = text; // takes what the user has written and puts it in the todo
+      todoList.appendChild(todo); // this adds the todo
+    }
+
+    // if any todo is set and we refresh the page it will disappear but if u use this command then if in the
+    // local storage there is a todo it will reprint it on the list otherwise it wont appera on the list 
+    for (var i = 0; i < storage.length; i++) {
+      todoMaker(storage[i]);
+    }
+
+    button.addEventListener('click', function() {
+
+      // clear the `localStorage` with the `clear()` method
+      localStorage.clear();
+      while (todoList.firstChild) {
+        todoList.removeChild(todoList.firstChild);
+      }
+    })
+
+  </script>
+</body>
+</html>
